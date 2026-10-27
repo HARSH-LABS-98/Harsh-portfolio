@@ -139,7 +139,8 @@ export function SeasonParticles({ kind, accent }: { kind: ParticleKind; accent: 
   useEffect(() => {
     if (reduce) { setHtml(""); return; }
     const isMobile = window.innerWidth < 640;
-    const count = kind === "rain" ? (isMobile ? 40 : 80) : (isMobile ? 18 : 36);
+    /* lighter particle counts — no jank on phones */
+    const count = kind === "rain" ? (isMobile ? 24 : 48) : (isMobile ? 12 : 24);
     let out = "";
     for (let i = 0; i < count; i++) {
       const dur =

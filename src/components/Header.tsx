@@ -18,10 +18,10 @@ function SeasonSwitch({ compact = false }: { compact?: boolean }) {
       <button
         data-mode="auto"
         aria-pressed={mode === "auto"}
-        title="Auto (follow India's season)"
-        aria-label="Auto season"
+        title="Auto — follow your location's season"
+        aria-label="Auto season (follows your location)"
         onClick={() => setMode("auto")}
-      >A</button>
+      ><span className="ico">⌖</span></button>
       {ORDER.map((id) => (
         <button
           key={id}
@@ -46,13 +46,15 @@ export default function Header() {
         <div className="nav-inner glass">
           <a href="#top" className="logo">
             <span className="logo-dot" />
-            harshu<span className="serif accent">&nbsp;.portfolio</span>
+            <span>harshu</span>
+            <span className="logo-dash accent">–</span>
+            <span>portfolio</span>
           </a>
           <nav className="nav-links" aria-label="Main">
             {LINKS.map((l) => <a key={l.href} href={l.href}>{l.label}</a>)}
           </nav>
           <div className="nav-right">
-            <SeasonSwitch />
+            <SeasonSwitch compact />
             <button
               className="theme-toggle"
               onClick={toggleTheme}

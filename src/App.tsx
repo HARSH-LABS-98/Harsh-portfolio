@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { SEASONS, detectSeason, Season, SeasonId } from "./seasons";
+import { SEASONS, Season, SeasonId, PRIMARY } from "./seasons";
+import { resolveAutoSeason, dailyBackgroundUrl } from "./autoTheme";
 import Header from "./components/Header";
 import {
   AuroraBackground, SeasonParticles, NoiseOverlay,
@@ -30,6 +31,7 @@ export function useApp(): AppState {
 
 export default function App() {
   const [mode, setModeRaw] = useState<SeasonMode>("auto");
+  const [autoSeasonId, setAutoSeasonId] = useState<SeasonId>(PRIMARY);
   const [theme, setTheme] = useState<Theme>(() => {
     try {
       const saved = localStorage.getItem("harshu-theme");
@@ -40,19 +42,24 @@ export default function App() {
   const [toast, setToast] = useState<AppState["toast"]>(null);
   const toastTimer = useRef<number | null>(null);
 
-  const detected = detectSeason();
-  const season = SEASONS[mode === "auto" ? detected : mode];
-  const firstApply = useRef(true);
+  /* background location scan — starts on primary, upgrades if the visitor is in India */
+  useEffect(() => {
+    let alive = true;
+    resolveAutoSeason().then((id) => {
+      if (alive && id !== PRIMARY) setAutoSeasonId(id);
+    });
+    return () => { alive = false; };
+  }, []);
+
+  const season = SEASONS[mode === "auto" ? autoSeasonId : mode];
 
   const setMode = (m: SeasonMode) => {
     setModeRaw(m);
-    const s = SEASONS[m === "auto" ? detected : (m as SeasonId)];
+    const s = SEASONS[m === "auto" ? autoSeasonId : (m as SeasonId)];
     setToast({ season: s, manual: m !== "auto" });
   };
 
-  const toggleTheme = () => {
-    setTheme((t) => (t === "light" ? "dark" : "light"));
-  };
+  const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
 
   /* push season + theme into CSS variables */
   useEffect(() => {
@@ -72,22 +79,15 @@ export default function App() {
     return () => { if (toastTimer.current) window.clearTimeout(toastTimer.current); };
   }, [toast]);
 
-  /* show detected season toast once on first load */
-  useEffect(() => {
-    if (firstApply.current) {
-      firstApply.current = false;
-      const t = window.setTimeout(
-        () => setToast({ season: SEASONS[detectSeason()], manual: false }),
-        900
-      );
-      return () => window.clearTimeout(t);
-    }
-  }, []);
-
   const value: AppState = { season, mode, setMode, theme, toggleTheme, toast };
 
   return (
     <Ctx.Provider value={value}>
+      <div
+        className="bg-photo"
+        aria-hidden="true"
+        style={{ backgroundImage: `url(${dailyBackgroundUrl()})` }}
+      />
       <AuroraBackground />
       <SeasonParticles kind={season.particle} accent={season.accent} />
       <NoiseOverlay />

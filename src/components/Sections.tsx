@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { useApp } from "../App";
-import HeroScene from "./HeroScene";
 import { Reveal, TiltCard, Magnetic, Marquee } from "./Effects";
 import type { SeasonMode } from "../App";
 import type { Season } from "../seasons";
+
+/* 3D is code-split: the page paints first, the scene loads right after */
+const HeroScene = lazy(() => import("./HeroScene"));
+
+function SceneFallback() {
+  return (
+    <div className="hero-scene-fallback" aria-hidden="true">
+      <div className="orb core" />
+      <div className="orb ring" />
+    </div>
+  );
+}
 
 /* --------------------------------- HERO ---------------------------------- */
 export function Hero() {
@@ -51,7 +62,14 @@ export function Hero() {
           </Reveal>
         </div>
         <Reveal delay={0.2} className="hero-scene-wrap">
-          <HeroScene />
+          <div className="hero-scene">
+            <Suspense fallback={<SceneFallback />}>
+              <HeroScene />
+            </Suspense>
+            <div className="hero-badge glass">
+              <em>{season.emoji}</em> Now in India: <b>{season.name} · {season.hindi}</b>
+            </div>
+          </div>
         </Reveal>
       </div>
       <Marquee
