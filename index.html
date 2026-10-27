@@ -1,9 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Harshu's portfolio — a glass-minimal, season-aware portfolio from India. Works fully offline." />
 <title>Harshu — Portfolio (Glass Minimal, Season-Aware)</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F4F7FB'/><circle cx='16' cy='16' r='7' fill='%23C9758C'/></svg>" />
 <style>
@@ -84,7 +83,6 @@
     .nav-inner { gap: 8px; padding: 10px 12px; }
     .logo { font-size: 13px; gap: 8px; }
   }
-  @media (min-width: 561px) { .mobile-panel .switch { display: flex; } }
   html, body { max-width: 100vw; overflow-x: clip; }
 
   .btn-primary {
@@ -255,15 +253,18 @@
   .toast b small { font-weight: 400; color: #94A3B8; font-size: 11px; margin-left: 4px; }
   .toast span { font-size: 12px; color: var(--muted); }
 
-  /* reveal + tilt + magnetic */
-  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s cubic-bezier(.22,1,.36,1) var(--d,0s), transform .8s cubic-bezier(.22,1,.36,1) var(--d,0s); }
+  /* reveal + tilt + magnetic
+     IMPORTANT: content is VISIBLE by default. It is only hidden while the
+     reveal animation is armed, which happens in JS after everything is
+     confirmed to work. If any script fails, the page simply shows everything. */
+  html.rv-on .reveal:not(.in) { opacity: 0; transform: translateY(30px); transition: opacity .8s cubic-bezier(.22,1,.36,1) var(--d,0s), transform .8s cubic-bezier(.22,1,.36,1) var(--d,0s); }
   .reveal.in { opacity: 1; transform: none; }
   [data-tilt] { transform-style: preserve-3d; will-change: transform; }
   [data-magnetic] { display: inline-flex; will-change: transform; }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .reveal { opacity: 1; transform: none; transition: none; }
+    .reveal, html.rv-on .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
     [data-tilt], [data-magnetic] { transform: none !important; }
     .particles { display: none; }
     .bg-fx { transition: none; }
@@ -366,7 +367,7 @@
       <h2 class="reveal" style="--d:.06s">A quiet toolkit, <span class="serif accent">sharpened daily.</span></h2>
       <div class="block-body grid-skills">
         <div class="reveal"><div class="skill-card glass" data-tilt>
-          <div class="icon-tile">✎</div><h3>Product & UI/UX Design</h3>
+          <div class="icon-tile">✎</div><h3>Product &amp; UI/UX Design</h3>
           <p>Interfaces that feel quiet and inevitable — PRDs, design systems, glassmorphism, 3D composition.</p>
           <div class="tags"><span>UI/UX</span><span>Design Systems</span><span>Prototyping</span><span>PRDs</span></div>
         </div></div>
@@ -398,7 +399,7 @@
           <div class="thumb"><span class="b1"></span><span class="b2"></span><span class="glyph">✦</span></div>
           <div class="project-body">
             <div class="project-head"><h3>Ai-studio</h3><span class="project-year">2025</span></div>
-            <p>An AI playground for designing, testing and shipping prompts & agents — where my design and code obsessions first collided.</p>
+            <p>An AI playground for designing, testing and shipping prompts &amp; agents — where my design and code obsessions first collided.</p>
             <div class="project-tags"><span>React</span><span>AI</span><span>Open Source</span></div>
             <a class="project-link" href="https://github.com/HARSH-LABS-98" target="_blank" rel="noreferrer">View on GitHub <span class="arrow">↗</span></a>
           </div>
@@ -497,8 +498,8 @@
   var SEASONS = {
     winter:  { id:"winter",  name:"Winter",  hindi:"Shishir", emoji:"❄️", accent:"#6E93C9", soft:"#EAF1FA", deep:"#33517A", particle:"snow",  tagline:"Frost-tipped glass, warm hearts." },
     summer:  { id:"summer",  name:"Summer",  hindi:"Grishma", emoji:"☀️", accent:"#E5924A", soft:"#FBEFDD", deep:"#8A4E1C", particle:"mote",  tagline:"Marigold mornings, mango afternoons." },
-    monsoon: { id:"monsoon", name:"Monsoon", hindi:"Varsha", emoji:"🌧️", accent:"#4C9B9E", soft:"#E0F1F0", deep:"#1F5A5D", particle:"rain",  tagline:"Petrichor, chai and fresh code." },
-    autumn:   { id:"autumn",  name:"Autumn",  hindi:"Sharad", emoji:"🍂", accent:"#C9758C", soft:"#F8E7EC", deep:"#8A3A55", particle:"petal", tagline:"Festival skies, marigold light." }
+    monsoon: { id:"monsoon", name:"Monsoon", hindi:"Varsha",  emoji:"🌧️", accent:"#4C9B9E", soft:"#E0F1F0", deep:"#1F5A5D", particle:"rain",  tagline:"Petrichor, chai and fresh code." },
+    autumn:  { id:"autumn",  name:"Autumn",  hindi:"Sharad",  emoji:"🍂", accent:"#C9758C", soft:"#F8E7EC", deep:"#8A3A55", particle:"petal", tagline:"Festival skies, marigold light." }
   };
   var ORDER = ["winter", "summer", "monsoon", "autumn"];
 
@@ -512,10 +513,12 @@
 
   var mode = "auto";
   var detected = detectSeason();
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reduceMotion = false;
+  try { reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
   var rootStyle = document.documentElement.style;
 
   function currentSeason() { return mode === "auto" ? SEASONS[detected] : SEASONS[mode]; }
+  function each(list, fn) { Array.prototype.forEach.call(list, fn); }
 
   /* ------------------------------ bg crossfade ----------------------------- */
   var bgA = document.getElementById("bgA"), bgB = document.getElementById("bgB");
@@ -583,7 +586,7 @@
   /* -------------------------------- switcher ------------------------------- */
   var switches = document.querySelectorAll("[data-season-switch]");
   function buildSwitches() {
-    Array.prototype.forEach.call(switches, function (el) {
+    each(switches, function (el) {
       var html = '<button data-mode="auto" title="Auto (follow India\'s season)" aria-label="Auto season">A</button>';
       ORDER.forEach(function (id) {
         html += '<button data-mode="' + id + '" title="' + SEASONS[id].name + " (" + SEASONS[id].hindi + ')" aria-label="Switch to ' + SEASONS[id].name + '"><span class="ico">' + SEASONS[id].emoji + "</span></button>";
@@ -601,8 +604,8 @@
     });
   }
   function markActive() {
-    Array.prototype.forEach.call(switches, function (el) {
-      Array.prototype.forEach.call(el.querySelectorAll("button[data-mode]"), function (b) {
+    each(switches, function (el) {
+      each(el.querySelectorAll("button[data-mode]"), function (b) {
         b.setAttribute("aria-pressed", String(b.getAttribute("data-mode") === mode));
       });
     });
@@ -611,27 +614,29 @@
   /* --------------------------------- toast --------------------------------- */
   var toast = document.getElementById("toast"), toastTimer = null;
   function showToast(s) {
-    toast.querySelector("[data-season-emoji]").textContent = s.emoji;
-    toast.querySelector("[data-season-label]").textContent = s.name + " · " + s.hindi;
-    toast.querySelector("[data-season-mode]").textContent = mode === "auto" ? "auto" : "manual";
-    toast.querySelector("[data-season-tagline]").textContent = s.tagline;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toast.classList.remove("show"); }, 3400);
+    try {
+      toast.querySelector("[data-season-emoji]").textContent = s.emoji;
+      toast.querySelector("[data-season-label]").textContent = s.name + " · " + s.hindi;
+      toast.querySelector("[data-season-mode]").textContent = mode === "auto" ? "auto" : "manual";
+      toast.querySelector("[data-season-tagline]").textContent = s.tagline;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { toast.classList.remove("show"); }, 3400);
+    } catch (e) {}
   }
 
   /* ------------------------------ apply season ----------------------------- */
   var firstApply = true;
+  var heroScene = null; /* set by initScene / initScene2D */
   function applyTheme(s, showToastIfManual) {
     rootStyle.setProperty("--accent", s.accent);
     rootStyle.setProperty("--accent-soft", s.soft);
     rootStyle.setProperty("--accent-deep", s.deep);
     paintBackground(s);
     buildParticles(s);
-    var w = document.querySelectorAll("[data-season-word]");
-    Array.prototype.forEach.call(w, function (el) { el.textContent = s.name.toLowerCase(); });
-    Array.prototype.forEach.call(document.querySelectorAll("[data-season-emoji]"), function (el) { el.textContent = s.emoji; });
-    Array.prototype.forEach.call(document.querySelectorAll("[data-season-label]"), function (el) { el.textContent = s.name + " (" + s.hindi + ")"; });
+    each(document.querySelectorAll("[data-season-word]"), function (el) { el.textContent = s.name.toLowerCase(); });
+    each(document.querySelectorAll("[data-season-emoji]"), function (el) { el.textContent = s.emoji; });
+    each(document.querySelectorAll("[data-season-label]"), function (el) { el.textContent = s.name + " (" + s.hindi + ")"; });
     if (heroScene && heroScene.setTarget) heroScene.setTarget(s.accent);
     markActive();
     if (showToastIfManual && !firstApply) showToast(s);
@@ -643,14 +648,15 @@
   }
 
   /* -------------------------------- 3D scene ------------------------------- */
-  /* Original WebGL glass sculpture, restored. If WebGL is unavailable or fails
-     to actually render (some mobile GPUs), we transparently fall back to the
-     2D-canvas renderer so the hero is never blank. */
-  var heroScene = null;
+  /* Original WebGL glass sculpture. If WebGL is unavailable or silently fails
+     to rasterise (some mobile GPUs), fall back to the 2D-canvas renderer. */
   function initScene() {
     var canvas = document.getElementById("gl");
-    var gl = canvas.getContext("webgl", { antialias: true, alpha: true }) ||
-             canvas.getContext("experimental-webgl", { antialias: true, alpha: true });
+    var gl = null;
+    try {
+      gl = canvas.getContext("webgl", { antialias: true, alpha: true }) ||
+           canvas.getContext("experimental-webgl", { antialias: true, alpha: true });
+    } catch (e) {}
     if (!gl) { use2DFallback(); return; }
 
     var fellBack = false;
@@ -888,8 +894,8 @@
       gl.depthMask(true);
     }
 
-    /* verify the GPU actually drew something; some mobile GPUs return a context
-       but never rasterise (the "blank rectangle" bug) — fall back if so. */
+    /* verify the GPU actually rasterised something; some mobile GPUs return a
+       context but never draw (the "blank rectangle" bug) — fall back if so */
     function verifyDraw() {
       try {
         var px = new Uint8Array(4);
@@ -918,20 +924,18 @@
     setTimeout(resize, 60);
     try { drawStatic(0); verifyDraw(); } catch (e) { use2DFallback(); }
     if (!fellBack) {
-      if (reduceMotion) { /* static frame already drawn */ } else { requestAnimationFrame(frame); }
-    }
-
-    if (fellBack) return;
-    heroScene = {
-      setTarget: function (hex) {
-        var c = hexToRgb(hex);
-        target = c;
-        if (reduceMotion) {
-          accent = { r: c.r, g: c.g, b: c.b };
-          drawStatic(0);
+      if (!reduceMotion) requestAnimationFrame(frame);
+      heroScene = {
+        setTarget: function (hex) {
+          var c = hexToRgb(hex);
+          target = c;
+          if (reduceMotion) {
+            accent = { r: c.r, g: c.g, b: c.b };
+            drawStatic(0);
+          }
         }
-      }
-    };
+      };
+    }
   }
 
   /* ------------------- 2D-canvas fallback (no WebGL needed) ------------------ */
@@ -1115,21 +1119,24 @@
   /* ------------------------------ interactions ----------------------------- */
   function initReveals() {
     var els = document.querySelectorAll(".reveal");
-    if (!("IntersectionObserver" in window)) {
-      Array.prototype.forEach.call(els, function (e) { e.classList.add("in"); });
-      return;
-    }
+    if (reduceMotion) { each(els, function (e) { e.classList.add("in"); }); return; }
+    if (!("IntersectionObserver" in window)) { each(els, function (e) { e.classList.add("in"); }); return; }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
-    Array.prototype.forEach.call(els, function (e) { io.observe(e); });
+    each(els, function (e) { io.observe(e); });
+    /* arm the hidden state only AFTER the observer is live — if this line is
+       never reached (any error above), content simply stays visible */
+    document.documentElement.classList.add("rv-on");
+    /* safety net: if anything went unnoticed, reveal all after 2.5s */
+    setTimeout(function () { each(els, function (e) { e.classList.add("in"); }); }, 2500);
   }
 
   function initTilt() {
     if (reduceMotion) return;
-    Array.prototype.forEach.call(document.querySelectorAll("[data-tilt]"), function (el) {
+    each(document.querySelectorAll("[data-tilt]"), function (el) {
       el.style.transition = "transform .18s ease-out";
       el.addEventListener("pointermove", function (e) {
         var r = el.getBoundingClientRect();
@@ -1146,7 +1153,7 @@
 
   function initMagnetic() {
     if (reduceMotion) return;
-    Array.prototype.forEach.call(document.querySelectorAll("[data-magnetic]"), function (el) {
+    each(document.querySelectorAll("[data-magnetic]"), function (el) {
       el.style.transition = "transform .25s cubic-bezier(.22,1,.36,1)";
       el.addEventListener("pointermove", function (e) {
         var r = el.getBoundingClientRect();
@@ -1163,15 +1170,3 @@
     function update() {
       var h = document.documentElement;
       var max = h.scrollHeight - h.clientHeight;
-      bar.style.transform = "scaleX(" + (max > 0 ? h.scrollTop / max : 0) + ")";
-      ticking = false;
-    }
-    window.addEventListener("scroll", function () {
-      if (!ticking) { requestAnimationFrame(update); ticking = true; }
-    }, { passive: true });
-    update();
-  }
-
-  function initNav() {
-    document.getElementById("burger").addEventListener("click", function () {
-      document.body.classList.toggle("menu-open");
