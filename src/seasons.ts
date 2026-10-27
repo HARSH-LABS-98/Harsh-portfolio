@@ -13,23 +13,23 @@ export interface Season {
   tagline: string;
 }
 
-/** The primary identity of the site — Crystal Blue (from the reference palette) */
+/** The primary identity of the site — Alaskan Blue (first blue from the reference) */
 export const PRIMARY: SeasonId = "winter";
 
 export const SEASONS: Record<SeasonId, Season> = {
   winter: {
     id: "winter", name: "Winter", hindi: "Shishir", emoji: "❄️",
-    accent: "#1E90FF", soft: "#E6F0FA", deep: "#1B4E8F",
-    particle: "snow", tagline: "Crystal blue, calm and clear."
+    accent: "#71AAE5", soft: "#EAF3FC", deep: "#2B5B98",
+    particle: "snow", tagline: "Alaskan blue, calm and clear."
   },
   summer: {
     id: "summer", name: "Summer", hindi: "Grishma", emoji: "☀️",
-    accent: "#E5924A", soft: "#FBEFDD", deep: "#8A4E1C",
-    particle: "mote", tagline: "Marigold mornings, mango afternoons."
+    accent: "#E9C46A", soft: "#FAF4E3", deep: "#8C6D2F",
+    particle: "mote", tagline: "Soft sunlight, slow afternoons."
   },
   monsoon: {
     id: "monsoon", name: "Monsoon", hindi: "Varsha", emoji: "🌧️",
-    accent: "#4C9B9E", soft: "#E0F1F0", deep: "#1F5A5D",
+    accent: "#708090", soft: "#E8EDF2", deep: "#2E3A46",
     particle: "rain", tagline: "Petrichor, chai and fresh code."
   },
   autumn: {

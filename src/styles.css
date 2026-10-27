@@ -1,13 +1,13 @@
 /* ============================================================
    Harshu's Portfolio — Ritu UI design system
-   Primary: Crystal Blue (winter) · Light + dark themes · 4 seasons
+   Primary: Alaskan Blue (winter) · Light + dark themes · 4 seasons
    ============================================================ */
 
 :root {
-  /* season tokens (set by JS; crystal blue is the primary default) */
-  --accent: #1E90FF;
-  --accent-soft: #E6F0FA;
-  --accent-deep: #1B4E8F;
+  /* season tokens (set by JS; Alaskan Blue is the primary default) */
+  --accent: #71AAE5;
+  --accent-soft: #EAF3FC;
+  --accent-deep: #2B5B98;
 
   /* light theme (default) */
   --bg: #F5F7FB;
@@ -529,12 +529,21 @@ footer a:hover { color: var(--ink); }
 /* "Let's talk" hidden earlier so the burger + toggles always stay inside the bar */
 @media (max-width: 560px) {
   .nav-cta { display: none; }
+  /* the header switch doesn't fit on phones — it lives in the burger panel */
+  .nav-right .switch { display: none; }
 }
 @media (max-width: 560px) {
   .nav-inner { gap: 6px; padding: 10px 10px; }
   .logo { font-size: 13px; gap: 5px; }
+  .theme-toggle, .burger { width: 34px; height: 34px; }
   .hero-scene-wrap { min-height: 280px; }
   .hero-scene { height: 280px; }
+}
+/* extra safety: never let the bar contents push the burger outside */
+@media (max-width: 400px) {
+  .container { padding: 0 14px; }
+  .nav-inner { padding: 10px 8px; gap: 5px; }
+  .theme-toggle, .burger { width: 32px; height: 32px; }
 }
 @media (min-width: 640px) {
   .grid-skills { grid-template-columns: 1fr 1fr; }
