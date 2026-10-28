@@ -57,8 +57,3 @@ export async function resolveAutoSeason(): Promise<SeasonId> {
   return PRIMARY;
 }
 
-/** A background photo that changes every day (seeded by the date). */
-export function dailyBackgroundUrl(): string {
-  const day = new Date().toISOString().slice(0, 10);
-  return `https://picsum.photos/seed/harshu-${day}/1920/1080`;
-}

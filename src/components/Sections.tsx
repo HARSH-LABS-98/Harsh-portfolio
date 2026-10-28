@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useApp } from "../App";
 import { Reveal, TiltCard, Magnetic, Marquee } from "./Effects";
 import type { SeasonMode } from "../App";
@@ -19,8 +20,15 @@ function SceneFallback() {
 /* --------------------------------- HERO ---------------------------------- */
 export function Hero() {
   const { season } = useApp();
+  /* the big word floats and fades away as you scroll — scroll animation */
+  const { scrollY } = useScroll();
+  const bigY = useTransform(scrollY, [0, 700], [0, 140]);
+  const bigFade = useTransform(scrollY, [0, 520], [1, 0]);
   return (
     <section className="hero" id="top">
+      <motion.div className="hero-bigword" style={{ y: bigY, opacity: bigFade }} aria-hidden="true">
+        PORTFOLIO
+      </motion.div>
       <div className="container hero-grid">
         <div className="hero-copy">
           <Reveal><p className="eyebrow">Harshu · Portfolio · 2026</p></Reveal>

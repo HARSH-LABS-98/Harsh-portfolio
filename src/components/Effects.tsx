@@ -110,12 +110,41 @@ export function CursorGlow() {
 }
 
 /* ---------------------------- AuroraBackground -------------------------- */
+/**
+ * Animated graphics background (no photos):
+ *  - nature feel: drifting aurora mist + twinkling stars
+ *  - graphics: slowly panning grid, spinning dashed orbit rings,
+ *    floating shapes — all infinite CSS loops, cheap to render
+ */
 export function AuroraBackground() {
   return (
     <div className="aurora" aria-hidden="true">
       <div className="aurora-blob b1" />
       <div className="aurora-blob b2" />
       <div className="aurora-blob b3" />
+      <div className="bg-grid" />
+      <div className="bg-orbit o1" />
+      <div className="bg-orbit o2" />
+      <div className="bg-orbit o3" />
+      <div className="bg-shape s1" />
+      <div className="bg-shape s2 ring" />
+      <div className="bg-shape s3" />
+      <div className="bg-shape s4 ring" />
+      <div className="bg-shape s5" />
+      <div className="bg-shape s6 ring" />
+      <div className="bg-stars">
+        {Array.from({ length: 26 }, (_, i) => (
+          <i
+            key={i}
+            className="bg-star"
+            style={{
+              left: `${(i * 37 + 4) % 100}%`,
+              top: `${(i * 53 + 6) % 100}%`,
+              animationDelay: `${(i % 9) * 0.55}s`
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -176,18 +205,30 @@ export function SeasonParticles({ kind, accent }: { kind: ParticleKind; accent: 
   );
 }
 
-/* -------------------------------- Marquee ------------------------------- */
+/* ----------------------------- CardMarquee ------------------------------ */
+const MQ_ICONS = ["✦", "⌘", "❂", "◎", "✎", "➤", "◈", "❖"];
+
+/**
+ * Infinite scrolling cards — two rows, opposite directions, pause on hover.
+ * Pure CSS transform animation: no JS per frame, cheap on phones.
+ */
 export function Marquee({ items }: { items: string[] }) {
-  const row = items.map((it, i) => (
-    <span className="marquee-item" key={i}>
-      <em>✦</em> {it}
-    </span>
-  ));
+  const cards = [...items, ...items];
+  const track = (reverse: boolean) => (
+    <div className="marquee-row">
+      <div className={`marquee-track${reverse ? " reverse" : ""}`}>
+        {cards.map((it, i) => (
+          <span className="mq-card" key={i}>
+            <em>{MQ_ICONS[i % MQ_ICONS.length]}</em> {it}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
   return (
     <div className="marquee" aria-hidden="true">
-      <div className="marquee-track">
-        {row}{row}
-      </div>
+      {track(false)}
+      {track(true)}
     </div>
   );
 }

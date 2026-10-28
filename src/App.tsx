@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { SEASONS, Season, SeasonId, PRIMARY } from "./seasons";
-import { resolveAutoSeason, dailyBackgroundUrl } from "./autoTheme";
+import { resolveAutoSeason } from "./autoTheme";
 import Header from "./components/Header";
 import {
   AuroraBackground, SeasonParticles, NoiseOverlay,
@@ -83,11 +83,6 @@ export default function App() {
 
   return (
     <Ctx.Provider value={value}>
-      <div
-        className="bg-photo"
-        aria-hidden="true"
-        style={{ backgroundImage: `url(${dailyBackgroundUrl()})` }}
-      />
       <AuroraBackground />
       <SeasonParticles kind={season.particle} accent={season.accent} />
       <NoiseOverlay />
