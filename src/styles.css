@@ -361,11 +361,10 @@ h2 {
   font-family: var(--font-display); font-weight: 700;
   font-size: clamp(110px, 16vw, 240px); line-height: 1;
   letter-spacing: 0.01em; white-space: nowrap;
-  color: transparent;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 88%, #fff) 0%, var(--accent-deep) 96%);
-  -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 12px 34px color-mix(in srgb, var(--accent) 38%, transparent));
-  transition: background 0.8s;
+  color: var(--accent);
+  text-shadow: 0 3px 0 color-mix(in srgb, var(--accent-deep) 65%, transparent),
+    0 18px 44px color-mix(in srgb, var(--accent) 40%, transparent);
+  transition: color 0.8s;
 }
 .bw-l { display: inline-block; }
 .bw-f { display: inline-block; animation: bw-float 5.6s ease-in-out infinite; }
@@ -375,7 +374,8 @@ h2 {
   .hero-bigword {
     top: 82px;
     font-size: clamp(44px, 15vw, 200px);
-    filter: drop-shadow(0 8px 20px color-mix(in srgb, var(--accent) 30%, transparent));
+    text-shadow: 0 2px 0 color-mix(in srgb, var(--accent-deep) 65%, transparent),
+      0 12px 30px color-mix(in srgb, var(--accent) 35%, transparent);
   }
 }
 .hero-grid { position: relative; z-index: 1; display: grid; gap: 40px; align-items: center; width: 100%; }
@@ -438,41 +438,42 @@ h2 {
 
 .orb-ring {
   position: absolute; inset: 0; border-radius: 50%;
-  border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border: 2.5px solid color-mix(in srgb, var(--accent) 80%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 30%, transparent);
   transition: border-color 0.8s;
 }
 .orb-ring.r-a { transform: rotateX(68deg); }
 .orb-ring.r-b { inset: 7%; border-style: dashed; animation: ring-b 26s linear infinite; }
 .orb-ring.r-c {
   inset: 3%;
-  border-color: color-mix(in srgb, var(--accent-deep) 55%, transparent);
+  border-color: color-mix(in srgb, var(--accent-deep) 70%, transparent);
   transform: rotateY(66deg) rotateX(12deg);
 }
-.orb-ring.r-d { inset: 11%; border-style: dotted; opacity: 0.65; animation: ring-d 34s linear infinite; }
+.orb-ring.r-d { inset: 11%; border-style: dotted; opacity: 0.9; animation: ring-d 34s linear infinite; }
 @keyframes ring-b { from { transform: rotateX(70deg) rotateY(20deg); } to { transform: rotateX(70deg) rotateY(20deg) rotateZ(360deg); } }
 @keyframes ring-d { from { transform: rotateX(-64deg) rotateY(-14deg); } to { transform: rotateX(-64deg) rotateY(-14deg) rotateZ(360deg); } }
 
 /* satellites riding the rings */
 .orb-sat { position: absolute; inset: 0; }
 .orb-sat i {
-  position: absolute; top: -5px; left: 50%; margin-left: -5px;
-  width: 10px; height: 10px; border-radius: 50%;
+  position: absolute; top: -6px; left: 50%; margin-left: -6px;
+  width: 12px; height: 12px; border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 14px var(--accent);
+  box-shadow: 0 0 18px var(--accent);
   transition: background 0.8s, box-shadow 0.8s;
 }
 .orb-sat.s-a { animation: sat-a 9s linear infinite; }
 .orb-sat.s-b { inset: 7%; animation: sat-b 13s linear infinite; }
 .orb-sat.s-c { inset: 3%; animation: sat-c 11s linear infinite; }
-.orb-sat.s-b i { width: 8px; height: 8px; margin-left: -4px; top: -4px; background: color-mix(in srgb, var(--accent) 55%, #fff); }
-.orb-sat.s-c i { width: 6px; height: 6px; margin-left: -3px; top: -3px; background: var(--accent-deep); }
+.orb-sat.s-b i { width: 10px; height: 10px; margin-left: -5px; top: -5px; background: color-mix(in srgb, var(--accent) 55%, #fff); }
+.orb-sat.s-c i { width: 8px; height: 8px; margin-left: -4px; top: -4px; background: var(--accent-deep); }
 @keyframes sat-a { from { transform: rotateX(68deg); } to { transform: rotateX(68deg) rotateZ(360deg); } }
 @keyframes sat-b { from { transform: rotateX(70deg) rotateY(20deg); } to { transform: rotateX(70deg) rotateY(20deg) rotateZ(360deg); } }
 @keyframes sat-c { from { transform: rotateY(66deg) rotateX(12deg); } to { transform: rotateY(66deg) rotateX(12deg) rotateZ(360deg); } }
 
 /* twinkling sparks around the system */
 .orb-spark {
-  position: absolute; font-size: 14px; color: var(--accent);
+  position: absolute; font-size: 20px; color: var(--accent);
   opacity: 0; animation: spark-in 5s ease-in-out infinite;
   transition: color 0.8s;
 }
@@ -688,6 +689,7 @@ footer a { color: var(--muted); text-decoration: none; font-weight: 500; }
 footer a:hover { color: var(--ink); }
 .footer-season { display: inline-flex; gap: 8px; align-items: center; font-size: 12px; }
 .footer-season em { color: var(--accent); font-style: normal; transition: color 0.8s; }
+.footer-season .ver { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; color: var(--faint); }
 
 .toast {
   position: fixed; right: 24px; bottom: 24px; z-index: 80;
