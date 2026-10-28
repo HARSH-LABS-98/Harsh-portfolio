@@ -37,7 +37,7 @@ export default function App() {
       const saved = localStorage.getItem("harshu-theme");
       if (saved === "dark" || saved === "light") return saved;
     } catch (e) { /* private mode */ }
-    return "light";
+    return "dark";
   });
   const [toast, setToast] = useState<AppState["toast"]>(null);
   const toastTimer = useRef<number | null>(null);

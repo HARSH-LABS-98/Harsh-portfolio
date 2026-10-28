@@ -88,8 +88,8 @@ export default function Header() {
               <p className="panel-label">Season theme</p>
               <SeasonSwitch />
               <p className="panel-label">Appearance</p>
-              <button className="theme-toggle panel-theme" onClick={toggleTheme}>
-                {theme === "light" ? "☾ Dark mode" : "☀ Light mode"}
+              <button className="theme-toggle panel-theme" onClick={toggleTheme} aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}>
+                {theme === "light" ? "☾" : "☀"}
               </button>
             </motion.div>
           )}

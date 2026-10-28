@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useApp } from "../App";
 import { Reveal, TiltCard, Magnetic, Marquee } from "./Effects";
@@ -12,6 +12,7 @@ function SceneFallback() {
   return (
     <div className="hero-scene-fallback" aria-hidden="true">
       <div className="orb core" />
+      <div className="orb ring r2" />
       <div className="orb ring" />
     </div>
   );
@@ -20,25 +21,52 @@ function SceneFallback() {
 /* --------------------------------- HERO ---------------------------------- */
 export function Hero() {
   const { season } = useApp();
-  /* the big word floats and fades away as you scroll — scroll animation */
+  /* the big word: letters spring in one by one, then float forever;
+     the whole word parallaxes away as you scroll */
   const { scrollY } = useScroll();
   const bigY = useTransform(scrollY, [0, 700], [0, 140]);
   const bigFade = useTransform(scrollY, [0, 520], [1, 0]);
+  /* 3D only on desktop — phones stay feather-light (no three.js download) */
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const fn = () => setIsDesktop(mq.matches);
+    mq.addEventListener("change", fn);
+    return () => mq.removeEventListener("change", fn);
+  }, []);
+  const WORD = "PORTFOLIO".split("");
+  /* slide-in stagger for the hero copy */
+  const copyVar: any = { hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } };
+  const itemVar: any = {
+    hidden: { opacity: 0, y: 44, x: -30 },
+    show: { opacity: 1, y: 0, x: 0, transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] } }
+  };
   return (
     <section className="hero" id="top">
       <motion.div className="hero-bigword" style={{ y: bigY, opacity: bigFade }} aria-hidden="true">
-        PORTFOLIO
+        {WORD.map((ch, i) => (
+          <motion.span
+            key={i}
+            initial={{ y: 80, opacity: 0, rotate: 10 }}
+            animate={{ y: 0, opacity: 1, rotate: 0 }}
+            transition={{ delay: 0.35 + i * 0.07, type: "spring", stiffness: 130, damping: 16 }}
+          >
+            <span className="bw-f" style={{ animationDelay: `${i * 0.45}s` }}>{ch}</span>
+          </motion.span>
+        ))}
       </motion.div>
       <div className="container hero-grid">
-        <div className="hero-copy">
-          <Reveal><p className="eyebrow">Harshu · Portfolio · 2026</p></Reveal>
-          <Reveal delay={0.08}>
+        <motion.div className="hero-copy" variants={copyVar} initial="hidden" animate="show">
+          <motion.div variants={itemVar}><p className="eyebrow">Harshu · Portfolio · 2026</p></motion.div>
+          <motion.div variants={itemVar}>
             <h1>
               Designing calm.<br />
               <span className="serif accent">Building bold.</span>
             </h1>
-          </Reveal>
-          <Reveal delay={0.16}>
+          </motion.div>
+          <motion.div variants={itemVar}>
             <p className="lead">
               I'm <b>Harshu</b> — a student designer-developer from India, exploring
               health, wealth and financial independence while building products along
@@ -46,38 +74,47 @@ export function Hero() {
               <b className="accent-deep-text">{season.name.toLowerCase()}</b>, just like
               the country outside.
             </p>
-          </Reveal>
-          <Reveal delay={0.24}>
+          </motion.div>
+          <motion.div variants={itemVar}>
             <div className="hero-ctas">
               <Magnetic><a href="#work" className="btn-primary">Explore work →</a></Magnetic>
               <Magnetic><a href="#contact" className="btn-ghost">Say hello</a></Magnetic>
             </div>
-          </Reveal>
-          <Reveal delay={0.32}>
+          </motion.div>
+          <motion.div variants={itemVar}>
             <div className="hero-chips">
               <span className="chip glass"><em>✦</em> UI/UX + Product</span>
               <span className="chip glass"><em>⌘</em> React · TypeScript</span>
               <span className="chip glass"><em>❂</em> Three.js / R3F</span>
             </div>
-          </Reveal>
-          <Reveal delay={0.4}>
+          </motion.div>
+          <motion.div variants={itemVar}>
             <div className="hero-stats">
               <div><b>10+</b><span>projects shipped</span></div>
               <div><b>4</b><span>seasons, one UI</span></div>
               <div><b>∞</b><span>curiosity</span></div>
             </div>
-          </Reveal>
-        </div>
-        <Reveal delay={0.2} className="hero-scene-wrap">
+          </motion.div>
+        </motion.div>
+        <motion.div
+          className="hero-scene-wrap"
+          initial={{ opacity: 0, scale: 0.92, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.55, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div className="hero-scene">
-            <Suspense fallback={<SceneFallback />}>
-              <HeroScene />
-            </Suspense>
+            {isDesktop ? (
+              <Suspense fallback={<SceneFallback />}>
+                <HeroScene />
+              </Suspense>
+            ) : (
+              <SceneFallback />
+            )}
             <div className="hero-badge glass">
               <em>{season.emoji}</em> Now in India: <b>{season.name} · {season.hindi}</b>
             </div>
           </div>
-        </Reveal>
+        </motion.div>
       </div>
       <Marquee
         items={[

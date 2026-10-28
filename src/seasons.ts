@@ -34,8 +34,8 @@ export const SEASONS: Record<SeasonId, Season> = {
   },
   autumn: {
     id: "autumn", name: "Autumn", hindi: "Sharad", emoji: "🍂",
-    accent: "#C05A3C", soft: "#F6E9E2", deep: "#6E2E1C",
-    particle: "petal", tagline: "Festival skies, terracotta light."
+    accent: "#BE4B42", soft: "#F8ECEB", deep: "#5E211E",
+    particle: "petal", tagline: "Festival skies, crimson light."
   }
 };
 

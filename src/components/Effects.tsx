@@ -145,6 +145,8 @@ export function AuroraBackground() {
           />
         ))}
       </div>
+      <i className="bg-shoot a" />
+      <i className="bg-shoot b" />
     </div>
   );
 }
