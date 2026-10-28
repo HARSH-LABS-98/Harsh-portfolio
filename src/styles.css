@@ -129,6 +129,15 @@ h2 {
 .bg-orbit.o3 { width: 190px; height: 190px; right: 14vw; bottom: 12vh; animation-duration: 58s; opacity: 0.75; }
 @keyframes orbit-spin { to { transform: rotate(360deg); } }
 
+/* phones: pull the orbit rings into view so the graphics are visible */
+@media (max-width: 640px) {
+  .bg-orbit.o1 { width: 240px; height: 240px; right: -60px; top: -70px; }
+  .bg-orbit.o2 { width: 180px; height: 180px; left: -50px; top: 24vh; }
+  .bg-orbit.o3 { width: 130px; height: 130px; right: 8vw; bottom: 18vh; }
+  .bg-shape.s3 { width: 64px; }
+  .bg-shape.s5 { left: 20vw; }
+}
+
 /* drifting shapes — floating graphic chips and rings */
 .bg-shape {
   position: absolute; border-radius: 16px;
@@ -345,7 +354,14 @@ h2 {
 [data-theme="dark"] .hero-bigword {
   -webkit-text-stroke-color: color-mix(in srgb, var(--accent) 62%, transparent);
 }
-@media (max-width: 1023px) { .hero-bigword { display: none; } }
+/* the word also shows on phones/tablets — smaller, still centered */
+@media (max-width: 1023px) {
+  .hero-bigword {
+    top: 82px;
+    font-size: clamp(44px, 15vw, 200px);
+    -webkit-text-stroke-width: 1px;
+  }
+}
 .hero-grid { position: relative; z-index: 1; display: grid; gap: 40px; align-items: center; width: 100%; }
 .hero-copy p.lead { font-size: 18px; line-height: 1.65; color: var(--muted); max-width: 34em; margin: 24px 0 0; }
 .hero-copy p.lead b { color: var(--ink); }

@@ -58,7 +58,6 @@ export function Hero() {
               <span className="chip glass"><em>✦</em> UI/UX + Product</span>
               <span className="chip glass"><em>⌘</em> React · TypeScript</span>
               <span className="chip glass"><em>❂</em> Three.js / R3F</span>
-              <span className="chip glass"><em>◎</em> Season-aware UI</span>
             </div>
           </Reveal>
           <Reveal delay={0.4}>
