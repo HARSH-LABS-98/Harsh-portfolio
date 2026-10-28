@@ -1,22 +1,10 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useApp } from "../App";
 import { Reveal, TiltCard, Magnetic, Marquee } from "./Effects";
+import { Orbital } from "./Orbital";
 import type { SeasonMode } from "../App";
 import type { Season } from "../seasons";
-
-/* 3D is code-split: the page paints first, the scene loads right after */
-const HeroScene = lazy(() => import("./HeroScene"));
-
-function SceneFallback() {
-  return (
-    <div className="hero-scene-fallback" aria-hidden="true">
-      <div className="orb core" />
-      <div className="orb ring r2" />
-      <div className="orb ring" />
-    </div>
-  );
-}
 
 /* --------------------------------- HERO ---------------------------------- */
 export function Hero() {
@@ -26,16 +14,6 @@ export function Hero() {
   const { scrollY } = useScroll();
   const bigY = useTransform(scrollY, [0, 700], [0, 140]);
   const bigFade = useTransform(scrollY, [0, 520], [1, 0]);
-  /* 3D only on desktop — phones stay feather-light (no three.js download) */
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
-  );
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const fn = () => setIsDesktop(mq.matches);
-    mq.addEventListener("change", fn);
-    return () => mq.removeEventListener("change", fn);
-  }, []);
   const WORD = "PORTFOLIO".split("");
   /* slide-in stagger for the hero copy */
   const copyVar: any = { hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } };
@@ -103,13 +81,7 @@ export function Hero() {
           transition={{ delay: 0.55, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="hero-scene">
-            {isDesktop ? (
-              <Suspense fallback={<SceneFallback />}>
-                <HeroScene />
-              </Suspense>
-            ) : (
-              <SceneFallback />
-            )}
+            <Orbital />
             <div className="hero-badge glass">
               <em>{season.emoji}</em> Now in India: <b>{season.name} · {season.hindi}</b>
             </div>

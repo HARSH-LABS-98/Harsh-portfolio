@@ -412,30 +412,76 @@ h2 {
 .hero-badge em { color: var(--accent); font-style: normal; }
 .hero-badge b { font-weight: 600; color: var(--ink); }
 
-.hero-scene-fallback { position: absolute; inset: 0; display: grid; place-items: center; }
-.hero-scene-fallback .orb { position: absolute; border-radius: 50%; left: 50%; top: 50%; }
-.hero-scene-fallback .core {
-  width: 200px; height: 200px; margin: -100px 0 0 -100px;
-  background: radial-gradient(circle at 34% 30%, #fff 0%, var(--accent) 55%, var(--accent-deep) 100%);
-  box-shadow: 0 0 80px color-mix(in srgb, var(--accent) 55%, transparent);
-  animation: core-breathe 6s ease-in-out infinite;
+/* ------------------------------ the orbital --------------------------
+   Harshu's hero centerpiece — a season-reactive gyroscope: breathing
+   core, tilted rings, orbiting satellites, twinkling sparks. Pure CSS
+   transforms: silky on any phone; on desktop it tilts with the mouse. */
+.orbital { position: absolute; inset: 0; display: grid; place-items: center; perspective: 900px; }
+.orb-sys {
+  position: relative; width: min(74%, 330px); aspect-ratio: 1 / 1;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.25s ease-out;
 }
-.hero-scene-fallback .ring {
-  width: 330px; height: 120px; margin: -60px 0 0 -165px;
-  border: 2px solid color-mix(in srgb, #c8ccd6 80%, transparent);
-  border-radius: 50%;
-  transform: rotate(18deg);
+.orb-core {
+  position: absolute; inset: 27%; border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.85), transparent 42%),
+    radial-gradient(circle at 50% 55%, var(--accent), var(--accent-deep) 80%);
+  box-shadow:
+    0 0 46px color-mix(in srgb, var(--accent) 60%, transparent),
+    inset 0 0 26px rgba(255, 255, 255, 0.25);
+  animation: core-pulse 4.2s ease-in-out infinite;
+  transition: background 0.8s, box-shadow 0.8s;
 }
-/* mobile hero: extra dashed ring that slowly spins */
-.hero-scene-fallback .ring.r2 {
-  width: 250px; height: 250px; margin: -125px 0 0 -125px;
-  border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent);
-  animation: ring-spin 26s linear infinite;
+@keyframes core-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+
+.orb-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  transition: border-color 0.8s;
 }
-@keyframes ring-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes core-breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
+.orb-ring.r-a { transform: rotateX(68deg); }
+.orb-ring.r-b { inset: 7%; border-style: dashed; animation: ring-b 26s linear infinite; }
+.orb-ring.r-c {
+  inset: 3%;
+  border-color: color-mix(in srgb, var(--accent-deep) 55%, transparent);
+  transform: rotateY(66deg) rotateX(12deg);
+}
+.orb-ring.r-d { inset: 11%; border-style: dotted; opacity: 0.65; animation: ring-d 34s linear infinite; }
+@keyframes ring-b { from { transform: rotateX(70deg) rotateY(20deg); } to { transform: rotateX(70deg) rotateY(20deg) rotateZ(360deg); } }
+@keyframes ring-d { from { transform: rotateX(-64deg) rotateY(-14deg); } to { transform: rotateX(-64deg) rotateY(-14deg) rotateZ(360deg); } }
+
+/* satellites riding the rings */
+.orb-sat { position: absolute; inset: 0; }
+.orb-sat i {
+  position: absolute; top: -5px; left: 50%; margin-left: -5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent);
+  transition: background 0.8s, box-shadow 0.8s;
+}
+.orb-sat.s-a { animation: sat-a 9s linear infinite; }
+.orb-sat.s-b { inset: 7%; animation: sat-b 13s linear infinite; }
+.orb-sat.s-c { inset: 3%; animation: sat-c 11s linear infinite; }
+.orb-sat.s-b i { width: 8px; height: 8px; margin-left: -4px; top: -4px; background: color-mix(in srgb, var(--accent) 55%, #fff); }
+.orb-sat.s-c i { width: 6px; height: 6px; margin-left: -3px; top: -3px; background: var(--accent-deep); }
+@keyframes sat-a { from { transform: rotateX(68deg); } to { transform: rotateX(68deg) rotateZ(360deg); } }
+@keyframes sat-b { from { transform: rotateX(70deg) rotateY(20deg); } to { transform: rotateX(70deg) rotateY(20deg) rotateZ(360deg); } }
+@keyframes sat-c { from { transform: rotateY(66deg) rotateX(12deg); } to { transform: rotateY(66deg) rotateX(12deg) rotateZ(360deg); } }
+
+/* twinkling sparks around the system */
+.orb-spark {
+  position: absolute; font-size: 14px; color: var(--accent);
+  opacity: 0; animation: spark-in 5s ease-in-out infinite;
+  transition: color 0.8s;
+}
+.orb-spark.p1 { top: 4%; right: 10%; }
+.orb-spark.p2 { bottom: 8%; left: 6%; animation-delay: 1.7s; }
+.orb-spark.p3 { top: 44%; right: -1%; animation-delay: 3.2s; }
+@keyframes spark-in {
+  0%, 100% { opacity: 0; transform: scale(0.6) rotate(0deg); }
+  40% { opacity: 0.95; transform: scale(1) rotate(45deg); }
 }
 
 /* --------------------------- card marquee ---------------------------- */
@@ -705,6 +751,6 @@ footer a:hover { color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .particles, .aurora-blob, .marquee-track, .bg-grid, .bg-orbit, .bg-shape, .bg-star, .bg-shoot, .bw-f { animation: none !important; }
+  .particles, .aurora-blob, .marquee-track, .bg-grid, .bg-orbit, .bg-shape, .bg-star, .bg-shoot, .bw-f, .orb-core, .orb-ring, .orb-sat, .orb-spark { animation: none !important; }
   .magnetic, .tilt { transition: none !important; }
 }
