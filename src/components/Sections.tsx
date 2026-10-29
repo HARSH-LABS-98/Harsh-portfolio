@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useApp } from "../App";
 import { Reveal, TiltCard, Magnetic, Marquee } from "./Effects";
-import { Orbital } from "./Orbital";
 import type { SeasonMode } from "../App";
 import type { Season } from "../seasons";
 
@@ -73,19 +72,11 @@ export function Hero() {
               <div><b>∞</b><span>curiosity</span></div>
             </div>
           </motion.div>
-        </motion.div>
-        <motion.div
-          className="hero-scene-wrap"
-          initial={{ opacity: 0, scale: 0.92, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.55, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div className="hero-scene">
-            <Orbital />
-            <div className="hero-badge glass">
+          <motion.div variants={itemVar}>
+            <p className="hero-badge-line glass">
               <em>{season.emoji}</em> Now in India: <b>{season.name} · {season.hindi}</b>
-            </div>
-          </div>
+            </p>
+          </motion.div>
         </motion.div>
       </div>
       <Marquee
@@ -326,7 +317,7 @@ export function Footer() {
     <footer>
       <div className="container footer-inner">
         <p>© 2026 Harshu — designed in every Indian season.</p>
-        <p className="footer-season"><em>{season.emoji}</em> Currently wearing: <b>{season.name} ({season.hindi})</b> · <span className="ver">v5.2</span></p>
+        <p className="footer-season"><em>{season.emoji}</em> Currently wearing: <b>{season.name} ({season.hindi})</b> · <span className="ver">v5.3</span></p>
         <a href="https://github.com/HARSH-LABS-98" target="_blank" rel="noreferrer">HARSH-LABS-98 ↗</a>
       </div>
     </footer>

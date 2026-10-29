@@ -399,91 +399,17 @@ h2 {
 }
 .hero-stats span { font-size: 12px; color: var(--faint); font-family: var(--font-mono); letter-spacing: 0.06em; }
 
-.hero-scene-wrap { min-height: 320px; }
-.hero-scene { position: relative; height: 320px; }
-.hero-scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; }
-.hero-badge {
-  position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
-  white-space: nowrap; display: inline-flex; align-items: center; gap: 8px;
+/* centered hero — typography leads, no 3D scene */
+.hero-copy { text-align: center; }
+.hero-copy p.lead { margin-left: auto; margin-right: auto; }
+.hero-ctas, .hero-chips, .hero-stats { justify-content: center; }
+.hero-badge-line {
+  display: inline-flex; align-items: center; gap: 8px;
   border-radius: 99px; padding: 8px 16px; font-size: 12px; color: var(--muted);
-  pointer-events: none;
-  max-width: calc(100% - 12px); overflow: hidden;
+  margin: 28px 0 0; white-space: nowrap;
 }
-.hero-badge em { color: var(--accent); font-style: normal; }
-.hero-badge b { font-weight: 600; color: var(--ink); }
-
-/* ------------------------------ the orbital --------------------------
-   Harshu's hero centerpiece — a season-reactive gyroscope: breathing
-   core, tilted rings, orbiting satellites, twinkling sparks. Pure CSS
-   transforms: silky on any phone; on desktop it tilts with the mouse. */
-.orbital { position: absolute; inset: 0; display: grid; place-items: center; perspective: 900px; }
-.orb-sys {
-  position: relative; width: min(74%, 330px); aspect-ratio: 1 / 1;
-  transform-style: preserve-3d;
-  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-  transition: transform 0.25s ease-out;
-}
-.orb-core {
-  position: absolute; inset: 27%; border-radius: 50%;
-  background:
-    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.85), transparent 42%),
-    radial-gradient(circle at 50% 55%, var(--accent), var(--accent-deep) 80%);
-  box-shadow:
-    0 0 46px color-mix(in srgb, var(--accent) 60%, transparent),
-    inset 0 0 26px rgba(255, 255, 255, 0.25);
-  animation: core-pulse 4.2s ease-in-out infinite;
-  transition: background 0.8s, box-shadow 0.8s;
-}
-@keyframes core-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
-
-.orb-ring {
-  position: absolute; inset: 0; border-radius: 50%;
-  border: 2.5px solid color-mix(in srgb, var(--accent) 80%, transparent);
-  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 30%, transparent);
-  transition: border-color 0.8s;
-}
-.orb-ring.r-a { transform: rotateX(68deg); }
-.orb-ring.r-b { inset: 7%; border-style: dashed; animation: ring-b 26s linear infinite; }
-.orb-ring.r-c {
-  inset: 3%;
-  border-color: color-mix(in srgb, var(--accent-deep) 70%, transparent);
-  transform: rotateY(66deg) rotateX(12deg);
-}
-.orb-ring.r-d { inset: 11%; border-style: dotted; opacity: 0.9; animation: ring-d 34s linear infinite; }
-@keyframes ring-b { from { transform: rotateX(70deg) rotateY(20deg); } to { transform: rotateX(70deg) rotateY(20deg) rotateZ(360deg); } }
-@keyframes ring-d { from { transform: rotateX(-64deg) rotateY(-14deg); } to { transform: rotateX(-64deg) rotateY(-14deg) rotateZ(360deg); } }
-
-/* satellites riding the rings */
-.orb-sat { position: absolute; inset: 0; }
-.orb-sat i {
-  position: absolute; top: -6px; left: 50%; margin-left: -6px;
-  width: 12px; height: 12px; border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 18px var(--accent);
-  transition: background 0.8s, box-shadow 0.8s;
-}
-.orb-sat.s-a { animation: sat-a 9s linear infinite; }
-.orb-sat.s-b { inset: 7%; animation: sat-b 13s linear infinite; }
-.orb-sat.s-c { inset: 3%; animation: sat-c 11s linear infinite; }
-.orb-sat.s-b i { width: 10px; height: 10px; margin-left: -5px; top: -5px; background: color-mix(in srgb, var(--accent) 55%, #fff); }
-.orb-sat.s-c i { width: 8px; height: 8px; margin-left: -4px; top: -4px; background: var(--accent-deep); }
-@keyframes sat-a { from { transform: rotateX(68deg); } to { transform: rotateX(68deg) rotateZ(360deg); } }
-@keyframes sat-b { from { transform: rotateX(70deg) rotateY(20deg); } to { transform: rotateX(70deg) rotateY(20deg) rotateZ(360deg); } }
-@keyframes sat-c { from { transform: rotateY(66deg) rotateX(12deg); } to { transform: rotateY(66deg) rotateX(12deg) rotateZ(360deg); } }
-
-/* twinkling sparks around the system */
-.orb-spark {
-  position: absolute; font-size: 20px; color: var(--accent);
-  opacity: 0; animation: spark-in 5s ease-in-out infinite;
-  transition: color 0.8s;
-}
-.orb-spark.p1 { top: 4%; right: 10%; }
-.orb-spark.p2 { bottom: 8%; left: 6%; animation-delay: 1.7s; }
-.orb-spark.p3 { top: 44%; right: -1%; animation-delay: 3.2s; }
-@keyframes spark-in {
-  0%, 100% { opacity: 0; transform: scale(0.6) rotate(0deg); }
-  40% { opacity: 0.95; transform: scale(1) rotate(45deg); }
-}
+.hero-badge-line em { color: var(--accent); font-style: normal; }
+.hero-badge-line b { font-weight: 600; color: var(--ink); }
 
 /* --------------------------- card marquee ---------------------------- */
 .marquee {
@@ -717,9 +643,6 @@ footer a:hover { color: var(--ink); }
   .nav-inner { gap: 6px; padding: 10px 10px; }
   .logo { font-size: 13px; gap: 5px; }
   .theme-toggle, .burger { width: 34px; height: 34px; }
-  .hero-scene-wrap { min-height: 280px; }
-  .hero-scene { height: 280px; }
-  .hero-badge { font-size: 10.5px; padding: 6px 12px; }
 }
 /* extra safety: never let the bar contents push the burger outside */
 @media (max-width: 400px) {
@@ -734,17 +657,11 @@ footer a:hover { color: var(--ink); }
   .field-row { grid-template-columns: 1fr 1fr; }
   .footer-inner { flex-direction: row; justify-content: space-between; }
 }
-@media (min-width: 768px) and (max-width: 1023px) {
-  .hero-scene { height: 380px; }
-  .hero-scene-wrap { min-height: 380px; }
-}
 @media (min-width: 1024px) {
   .nav-links { display: flex; }
   .burger { display: none; }
   .grid-work { grid-template-columns: repeat(3, 1fr); }
-  .hero-grid { grid-template-columns: 1.05fr 0.95fr; }
-  .hero-scene { height: 540px; }
-  .hero-scene-wrap { min-height: 540px; }
+  .hero-grid { grid-template-columns: 1fr; }
   section.block { padding: 120px 0; }
 }
 @media (min-width: 1280px) {
@@ -753,6 +670,6 @@ footer a:hover { color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .particles, .aurora-blob, .marquee-track, .bg-grid, .bg-orbit, .bg-shape, .bg-star, .bg-shoot, .bw-f, .orb-core, .orb-ring, .orb-sat, .orb-spark { animation: none !important; }
+  .particles, .aurora-blob, .marquee-track, .bg-grid, .bg-orbit, .bg-shape, .bg-star, .bg-shoot, .bw-f { animation: none !important; }
   .magnetic, .tilt { transition: none !important; }
 }

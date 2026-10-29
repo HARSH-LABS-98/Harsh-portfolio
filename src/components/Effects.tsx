@@ -4,7 +4,7 @@ import type { ParticleKind } from "../seasons";
 
 /* ------------------------------ Reveal ---------------------------------- */
 export function Reveal({
-  children, delay = 0, className = "", y = 36
+  children, delay = 0, className = "", y = 56
 }: { children: React.ReactNode; delay?: number; className?: string; y?: number }) {
   const reduce = useRef(
     typeof window !== "undefined" &&
@@ -17,7 +17,7 @@ export function Reveal({
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
