@@ -317,7 +317,7 @@ export function Footer() {
     <footer>
       <div className="container footer-inner">
         <p>© 2026 Harshu — designed in every Indian season.</p>
-        <p className="footer-season"><em>{season.emoji}</em> Currently wearing: <b>{season.name} ({season.hindi})</b> · <span className="ver">v5.4</span></p>
+        <p className="footer-season"><em>{season.emoji}</em> Currently wearing: <b>{season.name} ({season.hindi})</b> · <span className="ver">v5.5</span></p>
         <a href="https://github.com/HARSH-LABS-98" target="_blank" rel="noreferrer">HARSH-LABS-98 ↗</a>
       </div>
     </footer>

@@ -25,6 +25,7 @@
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-display: "Space Grotesk", var(--font-body);
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-poster: "Anton", var(--font-display);
 }
 
 [data-theme="dark"] {
@@ -354,30 +355,24 @@ h2 {
 /* ------------------------------- hero ------------------------------- */
 .hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 132px 0 40px; position: relative; }
 
-/* big watermark word — huge, bleeds off both edges like the reference.
-   letters spring in + float forever, scroll parallax */
+/* giant poster word — condensed Anton, flat solid color, wider than the
+   screen so it bleeds off both edges like the reference. Letters spring
+   in + float forever; the word parallaxes away as you scroll. */
 .hero-bigword {
   position: absolute; top: 64px; left: 0; right: 0; z-index: 0;
   text-align: center; pointer-events: none; user-select: none;
-  font-family: var(--font-display); font-weight: 700;
-  font-size: clamp(150px, 20vw, 430px); line-height: 1;
-  letter-spacing: -0.02em; white-space: nowrap;
+  font-family: var(--font-poster); font-weight: 400;
+  font-size: clamp(96px, 23vw, 460px); line-height: 0.95;
+  letter-spacing: -0.01em; white-space: nowrap;
   color: var(--accent);
-  text-shadow: 0 3px 0 color-mix(in srgb, var(--accent-deep) 65%, transparent),
-    0 18px 44px color-mix(in srgb, var(--accent) 40%, transparent);
   transition: color 0.8s;
 }
 .bw-l { display: inline-block; }
 .bw-f { display: inline-block; animation: bw-float 5.6s ease-in-out infinite; }
 @keyframes bw-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-/* phones: still huge — the word bleeds off the edges */
+/* phones: same poster scale — the word bleeds off the edges */
 @media (max-width: 1023px) {
-  .hero-bigword {
-    top: 74px;
-    font-size: clamp(56px, 19vw, 200px);
-    text-shadow: 0 2px 0 color-mix(in srgb, var(--accent-deep) 65%, transparent),
-      0 12px 30px color-mix(in srgb, var(--accent) 35%, transparent);
-  }
+  .hero-bigword { top: 68px; }
 }
 .hero-grid { position: relative; z-index: 1; display: grid; gap: 40px; align-items: center; width: 100%; }
 .hero-copy p.lead { font-size: 18px; line-height: 1.65; color: var(--muted); max-width: 34em; margin: 24px 0 0; }
