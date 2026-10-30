@@ -354,13 +354,14 @@ h2 {
 /* ------------------------------- hero ------------------------------- */
 .hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 132px 0 40px; position: relative; }
 
-/* big watermark word — letters spring in + float forever, scroll parallax */
+/* big watermark word — huge, bleeds off both edges like the reference.
+   letters spring in + float forever, scroll parallax */
 .hero-bigword {
-  position: absolute; top: 88px; left: 0; right: 0; z-index: 0;
+  position: absolute; top: 64px; left: 0; right: 0; z-index: 0;
   text-align: center; pointer-events: none; user-select: none;
   font-family: var(--font-display); font-weight: 700;
-  font-size: clamp(110px, 16vw, 240px); line-height: 1;
-  letter-spacing: 0.01em; white-space: nowrap;
+  font-size: clamp(150px, 20vw, 430px); line-height: 1;
+  letter-spacing: -0.02em; white-space: nowrap;
   color: var(--accent);
   text-shadow: 0 3px 0 color-mix(in srgb, var(--accent-deep) 65%, transparent),
     0 18px 44px color-mix(in srgb, var(--accent) 40%, transparent);
@@ -369,11 +370,11 @@ h2 {
 .bw-l { display: inline-block; }
 .bw-f { display: inline-block; animation: bw-float 5.6s ease-in-out infinite; }
 @keyframes bw-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-/* phones: the word is smaller but still there */
+/* phones: still huge — the word bleeds off the edges */
 @media (max-width: 1023px) {
   .hero-bigword {
-    top: 82px;
-    font-size: clamp(44px, 15vw, 200px);
+    top: 74px;
+    font-size: clamp(56px, 19vw, 200px);
     text-shadow: 0 2px 0 color-mix(in srgb, var(--accent-deep) 65%, transparent),
       0 12px 30px color-mix(in srgb, var(--accent) 35%, transparent);
   }
