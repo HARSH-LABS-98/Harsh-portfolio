@@ -9,9 +9,9 @@ import type { Season } from "../seasons";
 export function Hero() {
   const { season } = useApp();
   /* the big word: letters spring in one by one, then float forever;
-     the whole word parallaxes away as you scroll */
+     the whole word drifts UP and fades away as you scroll */
   const { scrollY } = useScroll();
-  const bigY = useTransform(scrollY, [0, 700], [0, 140]);
+  const bigY = useTransform(scrollY, [0, 700], [0, -160]);
   const bigFade = useTransform(scrollY, [0, 520], [1, 0]);
   const WORD = "PORTFOLIO".split("");
   /* slide-in stagger for the hero copy */
@@ -317,7 +317,7 @@ export function Footer() {
     <footer>
       <div className="container footer-inner">
         <p>© 2026 Harshu — designed in every Indian season.</p>
-        <p className="footer-season"><em>{season.emoji}</em> Currently wearing: <b>{season.name} ({season.hindi})</b> · <span className="ver">v5.5</span></p>
+        <p className="footer-season"><em>{season.emoji}</em> Currently wearing: <b>{season.name} ({season.hindi})</b> · <span className="ver">v5.6</span></p>
         <a href="https://github.com/HARSH-LABS-98" target="_blank" rel="noreferrer">HARSH-LABS-98 ↗</a>
       </div>
     </footer>

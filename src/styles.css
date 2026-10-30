@@ -353,13 +353,14 @@ h2 {
 .magnetic { display: inline-flex; will-change: transform; transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
 
 /* ------------------------------- hero ------------------------------- */
-.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 132px 0 40px; position: relative; }
+.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-start; padding: 128px 0 48px; position: relative; }
 
-/* giant poster word — condensed Anton, flat solid color, wider than the
-   screen so it bleeds off both edges like the reference. Letters spring
-   in + float forever; the word parallaxes away as you scroll. */
+/* giant poster word — its own band at the top of the hero, in normal flow
+   so nothing ever overlaps it. Condensed Anton, flat solid color, wider
+   than the screen so it bleeds off both edges like the reference.
+   Letters spring in + float forever; the word parallaxes up as you scroll. */
 .hero-bigword {
-  position: absolute; top: 64px; left: 0; right: 0; z-index: 0;
+  position: relative; z-index: 0; width: 100%;
   text-align: center; pointer-events: none; user-select: none;
   font-family: var(--font-poster); font-weight: 400;
   font-size: clamp(96px, 23vw, 460px); line-height: 0.95;
@@ -371,10 +372,7 @@ h2 {
 .bw-f { display: inline-block; animation: bw-float 5.6s ease-in-out infinite; }
 @keyframes bw-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 /* phones: same poster scale — the word bleeds off the edges */
-@media (max-width: 1023px) {
-  .hero-bigword { top: 68px; }
-}
-.hero-grid { position: relative; z-index: 1; display: grid; gap: 40px; align-items: center; width: 100%; }
+.hero-grid { position: relative; z-index: 1; display: grid; gap: 40px; align-items: center; width: 100%; margin-top: clamp(28px, 6vh, 72px); }
 .hero-copy p.lead { font-size: 18px; line-height: 1.65; color: var(--muted); max-width: 34em; margin: 24px 0 0; }
 .hero-copy p.lead b { color: var(--ink); }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
